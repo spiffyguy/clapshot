@@ -5,12 +5,14 @@
 
 DIR=${DIR:-"/mnt/clapshot-data/data"}
 URL_BASE=${URL_BASE:-"127.0.0.1:8080/"}
+WS_BASE=${WS_BASE:-"ws://"}
+HTTP_BASE=${WS_BASE:-"http://"}
 
 # Use same URL base as index.html for API server (as Nginx proxies localhost:8095/api to /api)
 cat > /etc/clapshot_client.conf << EOF
 {
-  "ws_url": "ws://${URL_BASE}api/ws",
-  "upload_url": "http://${URL_BASE}api/upload",
+  "ws_url": "${WS_BASE}${URL_BASE}api/ws",
+  "upload_url": "${HTTP_BASE}${URL_BASE}api/upload",
     "user_menu_extra_items": [
         { "label": "My Videos", "type": "url", "data": "/" }
     ],
@@ -22,7 +24,7 @@ EOF
 sed -i "s/[$]remote_user/docker/g" /etc/nginx/sites-enabled/clapshot
 
 # Assume user accesses this at $URL_BASE
-sed -i "s/^url-base.*/url-base = http://${URL_BASE}/g" /etc/clapshot-server.conf
+sed -i "s/^url-base.*/url-base = ${HTTP_BASE}${URL_BASE}/g" /etc/clapshot-server.conf
 echo "migrate = true" >> /etc/clapshot-server.conf
 
 
@@ -58,7 +60,7 @@ echo <<- "EOF"
                   | |
                   |_|
 
----  Browse http://127.0.0.1:8080  ---
+---  Browse ${HTTP_BASE}${URL_BASE}  ---
 ==============================================
 EOF
 
