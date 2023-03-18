@@ -3,8 +3,8 @@
 # This a Docker-side support script to run a demo of Clapshot (API server + Nginx)
 # in a single Docker container for demo and testing purposes.
 
-DIR="/mnt/clapshot-data/data"
-URL_BASE="127.0.0.1:8080/"
+DIR=${DIR:-"/mnt/clapshot-data/data"}
+URL_BASE=${URL_BASE:-"127.0.0.1:8080/"}
 
 # Use same URL base as index.html for API server (as Nginx proxies localhost:8095/api to /api)
 cat > /etc/clapshot_client.conf << EOF
